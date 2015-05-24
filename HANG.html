@@ -12,10 +12,27 @@
     <div id="ment" style= "width:100%;height:150xpx;"></div>
 
 <script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=dbca0e016ba71938b3f216466e14efa1 "></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
 
 <script>
+//init function
+function init(){
+    var ments = ["안녕 내이름은 이브이", "아직은 어리지만 세계 최고의 포켓몬이 될꺼야","그러기 위해서는 진화를 해야할텐데...", "나는 과연 어떤타입으로 진화하게될까?", "각 타입들의 최고를 만나면...뭔가 좀 알 수 있지않을까??", "나와 함께하지 않을래???", "일단 가장 가까운 썬더에게 찾아가보자."];
+    var i = 1;
+    //document.getElementById('roadview').
+    document.getElementById('roadview').style.background = "black";
+    document.getElementById("ment").innerHTML = "안녕 내이름은 이브이";
+   document.getElementById("ment").onclick = displayMent;
+    
+    function displayMent(){
+        document.getElementById("ment").innerHTML = ments[i];
+        i++;
+};
+}
+    
 //bring roadview
+    /*
 var roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
 var roadview = new daum.maps.Roadview(roadviewContainer); //로드뷰 객체
 var roadviewClient = new daum.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
@@ -26,12 +43,16 @@ var position = new daum.maps.LatLng(33.450701, 126.570667);
 roadviewClient.getNearestPanoId(position, 50, function(panoId) {
     roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
 });
-    
+    */
 //show ment
 var txt = "안녕";
 document.getElementById("ment").innerHTML = txt;
 var txt2 = "d야";
 document.getElementById("ment").innerHTML = txt2;
+    
+//excution
+init();
+    
 </script>
 
 </body>
