@@ -3,58 +3,127 @@
 <head>
     <meta charset="utf-8">
     <title>HANG(Have A Nice Game)</title>
-    
+    <style>
+        #image {
+            width : 300px;
+            height: 300px;
+            position : absolute;
+            left: 37%;
+            top: 75px;
+        }
+    </style>
 </head>
 <body>
 
 <!-- 로드뷰를 표시할 div 입니다 -->
-    <div id="roadview" style="width:100%;height:450px;"></div>
-    <div id="ment" style= "width:100%;height:150xpx;"></div>
-
+<div id="roadview" style="width:100%;height:450px;"></div>
+<div id="ment" style= "width:100%;height:150xpx;"></div>
+    <img id="image" src=""></div>
 <script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=dbca0e016ba71938b3f216466e14efa1 "></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
 
 <script>
+var ments = [];
+var roadview, roadviewContainer, roadviewClient;
+var position;
+var marker;
+var episode_num, story_num, ment_num;
+    
+document.getElementById("image").src = "img/이브이.png";
+    
 //init function
 function init(){
-    var ments = ["안녕 내이름은 이브이", "아직은 어리지만 세계 최고의 포켓몬이 될꺼야","그러기 위해서는 진화를 해야할텐데...", "나는 과연 어떤타입으로 진화하게될까?", "각 타입들의 최고를 만나면...뭔가 좀 알 수 있지않을까??", "나와 함께하지 않을래???", "일단 가장 가까운 썬더에게 찾아가보자."];
+    ments = ["안녕 내이름은 이브이", "아직은 어리지만 세계 최고의 포켓몬이 될꺼야","그러기 위해서는 진화를 해야할텐데...", "나는 과연 어떤타입으로 진화하게될까?", "각 타입들의 최고를 만나면...뭔가 좀 알 수 있지않을까??", "나와 함께하지 않을래???", "일단 가장 가까운 썬더에게 찾아가보자."];
     var i = 1;
-    //document.getElementById('roadview').
+    deleteroadview();
     document.getElementById('roadview').style.background = "black";
     document.getElementById("ment").innerHTML = "안녕 내이름은 이브이";
-   document.getElementById("ment").onclick = displayMent;
+    document.getElementById("ment").onclick = displayMent;
     
     function displayMent(){
         if(i < 7 ){
             document.getElementById("ment").innerHTML = ments[i];
             i++;
         }
-        else if(i == 7) bringroadview();
+        else if(i == 7){
+            //document.getElementById("image").src="";
+            $("#image").hide();
+            return bringroadview();
+        }
     };
-}
     
-function bringroadview(){
-    var roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
-    var roadview = new daum.maps.Roadview(roadviewContainer); //로드뷰 객체
-    var roadviewClient = new daum.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
-
-    var position = new daum.maps.LatLng(33.450701, 126.570667);
-
-// 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
-    roadviewClient.getNearestPanoId(position, 50, function(panoId) {
-        roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
-    });
 }
-    
+
+
 function deleteroadview(){
     $("#roadview").empty();
     document.getElementById('roadview').style.background = "black";
 }
+
+
     
+function bringroadview(){
+    roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
+    roadview = new daum.maps.Roadview(roadviewContainer); //로드뷰 객체 
+    roadviewClient = new daum.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+    position = new daum.maps.LatLng(37.55569, 127.04446);
+    roadviewClient.getNearestPanoId(position, 50, function(panoId) {
+        roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+    });
+    position = new daum.maps.LatLng(37.55569, 127.04446);
+    var imagename = "png/0" + story_num + ".png";
+    var markerImage = new daum.maps.MarkerImage(imagename, new daum.maps.Size(150, 150), "poly");
+    marker = new daum.maps.Marker({
+        position: position,
+        image : markerImage,
+        map: roadview
+    });
+    setEvent(marker);
+}
+ 
+function setEvent(Marker){
+    daum.maps.event.addListener(Marker, 'click', function(event) {
+		ments = ["피츄 : 앗!!!정체가 뭐냐???여기는 무슨 일이야???","이브이 : 여기가 썬더가 사는곳이 맞니???","피츄 : 응?? 그게 누군데?? 우리 형한테 가서 물어볼래???","이브이 : 너네 형이 어딨는데??","피츄 : 저쪽 노천극장에가면 있어~","이브이 : 알았어~~고마워"];
+        console.log("!!!!"); 
+        var imgname = "img/0" + story_num + ".png";
+        document.getElementById("image").src = imgname;
+        $("#image").show();
+        document.getElementById("ment").innerHTML = ments[ment_num];
+        document.getElementById("ment").onclick = displayMent;
+        function displayMent(){
+            if(ment_num < ments.length ){
+                document.getElementById("ment").innerHTML = ments[ment_num];
+                ment_num++;
+            }
+            else if(ment_num == ments.length){
+                marker.setMap(null);
+                story_num++;
+                var pngname = "png/0" + story_num + ".png";
+                var markerImage = new daum.maps.MarkerImage(pngname, new daum.maps.Size(150, 150), "poly");
+                marker = new daum.maps.Marker({
+                    position: position,
+                    image : markerImage,
+                    map: roadview
+                });
+                ment_num = 0;
+                $("#image").hide();
+                setEvent(marker);
+            }
+        };
+	});
+}
+    
+function ImplementEpisode(episode){
+    deleteroadview();
+    init();
+    ment_num = 0;
+    story_num = 0;
+    episode_num = episode;
+}
+
 //excution
-init();
-    
+ImplementEpisode(0);
 </script>
 
 </body>
