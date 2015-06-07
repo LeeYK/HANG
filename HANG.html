@@ -11,6 +11,42 @@
             left: 37%;
             top: 75px;
         }
+        #state {
+            left: 2%;
+            top: 20px;
+            position : absolute;
+            background-color: coral;
+            color: white;
+            text-align: center;
+        }
+        #statemenu {
+            left: 37%;
+            top: 75px;
+            position : absolute;
+            color: green;
+            width:300px;
+            height:200px;
+        }
+        table, tr, td {
+            background-color: aliceblue;
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align:center;
+        }
+        td {
+            width:100px;
+        }
+        .name{
+            height: 30px;
+        }
+        #exit{
+            left: 95%;
+            bottom: 20px;
+            position : absolute;
+            background-color: coral;
+            color: white;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -18,19 +54,83 @@
 <!-- 로드뷰를 표시할 div 입니다 -->
 <div id="roadview" style="width:100%;height:450px;"></div>
 <div id="ment" style= "width:100%;height:150xpx;"></div>
-    <img id="image" src=""></div>
+<img id="image" src=""></div>
+<div id="state" style="width:50px;height:20px">state</div>
 <script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=dbca0e016ba71938b3f216466e14efa1 "></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<div id="exit" style="width:50px;height:20px">exit</div>
+<div id="statemenu">
+    <table id="statetable">
+        <tr class="name">
+            <td>normal</td>
+            <td>???</td>
+            <td>???</td>
+        </tr>
+        <tr>
+            <td id="0" class="stateimage">
+                <img src="img/0.png" style="width:50px;height:50px"></td>
+            <td id="1" class="stateimage">???</td>
+            <td id="2" class="stateimage">???</td>
+        </tr>
+        <tr class="name">
+            <td>???</td>
+            <td>???</td>
+            <td>???</td>
+        </tr>
+        <tr>
+            <td id="3" class="stateimage">???</td>
+            <td id="4" class="stateimage">???</td>
+            <td id="5" class="stateimage">???</td>
+        </tr>
+        <tr class="name">
+            <td>???</td>
+            <td>???</td>
+            <td>???</td>
+        </tr>
+        <tr>
+            <td id="6" class="stateimage">???</td>
+            <td id="7" class="stateimage">???</td>
+            <td id="8" class="stateimage">???</td>
+        </tr>
+    </table>
+</div>
 
 
 <script>
+var now_state = 0;
+var state_info = ["normal", "electric", "water", "fire", "psychic", "dark", "grass" ,"fairy" , "grass", "ice"];
 var ments = [];
 var roadview, roadviewContainer, roadviewClient;
 var position;
+var positions = [];
 var marker;
 var episode_num, story_num, ment_num;
+
+positions[0] = new daum.maps.LatLng(37.55569, 127.04446);
+positions[1] = new daum.maps.LatLng(37.55516, 127.04449);
     
-document.getElementById("image").src = "img/이브이.png";
+document.getElementById("image").src = "img/0.png";
+    
+$("#statemenu").hide();
+    
+$(document).ready(function(){
+    $("#state").click(function(){
+        $("#statemenu").show();
+    });
+    
+    $(".stateimage").click(function(){
+        var clicked =  $(this).attr("id");
+        if(clicked >= episode_num){
+            alert(" 모험이 좀 더 필요합니다. ");
+        }
+        else{
+            now_state = clicked;
+        }
+        $("#statemenu").hide();
+    });
+});
+    
+
     
 //init function
 function init(){
@@ -71,7 +171,7 @@ function bringroadview(){
     roadviewClient.getNearestPanoId(position, 50, function(panoId) {
         roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
     });
-    position = new daum.maps.LatLng(37.55569, 127.04446);
+    //position = new daum.maps.LatLng(37.55569, 127.04446);
     var imagename = "png/0" + story_num + ".png";
     var markerImage = new daum.maps.MarkerImage(imagename, new daum.maps.Size(150, 150), "poly");
     marker = new daum.maps.Marker({
@@ -84,9 +184,9 @@ function bringroadview(){
  
 function setEvent(Marker){
     daum.maps.event.addListener(Marker, 'click', function(event) {
-		ments = ["피츄 : 앗!!!정체가 뭐냐???여기는 무슨 일이야???","이브이 : 여기가 썬더가 사는곳이 맞니???","피츄 : 응?? 그게 누군데?? 우리 형한테 가서 물어볼래???","이브이 : 너네 형이 어딨는데??","피츄 : 저쪽 노천극장에가면 있어~","이브이 : 알았어~~고마워"];
+		ments = ["피츄 : 앗!!!정체가 뭐냐???여기는 무슨 일이야???","이브이 : 여기가 썬더가 사는곳이 맞니???","피츄 : 응?? 그게 누군데?? 우리 형한테 가서 물어볼래???","이브이 : 너네 형이 어딨는데??","피츄 : 저쪽 한양대 박물관에가면 있어~","이브이 : 알았어~~고마워"];
         console.log("!!!!"); 
-        var imgname = "img/0" + story_num + ".png";
+        var imgname = "img/1" + story_num + ".png";
         document.getElementById("image").src = imgname;
         $("#image").show();
         document.getElementById("ment").innerHTML = ments[ment_num];
@@ -102,10 +202,12 @@ function setEvent(Marker){
                 var pngname = "png/0" + story_num + ".png";
                 var markerImage = new daum.maps.MarkerImage(pngname, new daum.maps.Size(150, 150), "poly");
                 marker = new daum.maps.Marker({
-                    position: position,
+                    position: positions[story_num%2],
                     image : markerImage,
                     map: roadview
                 });
+                //marker.setAltitude(1);
+                marker.setRange(20);
                 ment_num = 0;
                 $("#image").hide();
                 setEvent(marker);
@@ -123,7 +225,7 @@ function ImplementEpisode(episode){
 }
 
 //excution
-ImplementEpisode(0);
+ImplementEpisode(1);
 </script>
 
 </body>
