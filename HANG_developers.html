@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>HANG for developers</title>
+    <style>
+            #save {
+                left: 95%;
+               bottom: 20px;
+                position : absolute;
+                background-color: coral;
+                color: white;
+                text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="save" style="width:50px;height:20px">save</div>
+	<div id="map" style="width:100%;height:450px;"></div>
+	<script src="//apis.daum.net/maps/maps3.js?apikey=dbca0e016ba71938b3f216466e14efa1"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script>
+        var episode_num;
+        var markers = [];
+        
+        function init(){
+            while(true){
+                episode_num = prompt("변경할 에피소드를 말씀해주세요", "숫자");
+                if(isNaN(episode_num)){
+                    alert("숫자를 입력해주세요.");
+                }
+                else break;
+            }
+        }
+        
+        var mapContainer = document.getElementById('map'), 
+		    mapOption = {
+		        center: new daum.maps.LatLng(37.56724, 126.98336), 
+		        level: 3, 
+		        mapTypeId : daum.maps.MapTypeId.ROADMAP
+		    }; 
+
+		var map = new daum.maps.Map(mapContainer, mapOption); 
+
+		map.addOverlayMapTypeId(daum.maps.MapTypeId.ROADVIEW); 
+        
+            
+        $(document).ready(function(){
+            $("#save").click(function(){
+                
+            });
+        });
+    
+        
+    //execution
+    init();
+
+	</script>
+</body>
+</html>
